@@ -1,0 +1,65 @@
+#!/usr/bin/env python
+
+"""
+Trim templates in $DESI_BASIS_TEMPLATES into smaller templates
+"""
+
+from __future__ import absolute_import, division, print_function
+
+import sys, os
+from glob import glob
+import numpy as np
+import optparse
+from astropy.io import fits
+
+def trim_template(infile, outfile):
+    print(infile, '->', outfile)
+    n = 10
+    fx = fits.open(infile)
+    hdus = fits.HDUList()
+    hdus.append(fits.PrimaryHDU(fx[0].data[0::n, 0::n], header=fx[0].header))
+    hdus.append(fits.BinTableHDU(fx[1].data[0::n], header=fx[1].header))
+    hdus.append(fits.ImageHDU(fx[2].data[0::n], header=fx[2].header))    
+    hdus.writeto(outfile, clobber=True)
+        
+def trim_qso(infile, outfile):
+    print(infile, '->', outfile)
+    n = 10
+    fx = fits.open(infile)
+    hdus = fits.HDUList()
+    hdus.append(fx[0])
+    hdus.append(fits.BinTableHDU(fx[1].data[0::n], header=fx[1].header))
+    hdus.append(fits.ImageHDU(fx[2].data[0::n], header=fx[2].header))
+    hdus.append(fits.BinTableHDU(fx[3].data[0::n], header=fx[3].header))
+    hdus.append(fits.ImageHDU(fx[4].data[0::n], header=fx[4].header))
+
+    hdus.append(fits.ImageHDU(fx[5].data[:, 0::n], header=fx[5].header))
+    hdus.append(fits.ImageHDU(fx[6].data[0::n], header=fx[6].header))
+    hdus.writeto(outfile, clobber=True)    
+    
+def main():
+    parser = optparse.OptionParser(usage = "%prog [options]")
+    parser.add_option("-i", "--indir", type=str,  help="input basis template directory")
+    parser.add_option("-o", "--outdir", type=str,  help="output basis template directory", default='.')
+    parser.add_option("-r", "--randseed", type=int, default=0, help="random seed")
+    # parser.add_option("-v", "--verbose", action="store_true", help="some flag")
+    opts, args = parser.parse_args()
+
+    np.random.seed(opts.randseed)
+
+    if opts.indir is None:
+        if 'DESI_BASIS_TEMPLATES' in os.environ:
+            opts.indir = os.environ['DESI_BASIS_TEMPLATES']
+        else:
+            raise RuntimeError('ERROR: must provide --indir or $DESI_BASIS_TEMPLATES')
+        
+    for infile in sorted(glob(os.path.join(opts.indir, '*_templates_*.fits'))):
+        basename = os.path.basename(infile)
+        outfile = os.path.join(opts.outdir, basename.replace('.fits', '-lite.fits'))
+        if basename.startswith('qso'):
+            trim_qso(infile, outfile)
+        else:
+            trim_template(infile, outfile)
+
+if __name__ == '__main__':
+    main()

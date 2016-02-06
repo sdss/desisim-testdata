@@ -1,0 +1,50 @@
+#!/usr/bin/env python
+
+"""
+Trim $DESI_ROOT/spectro/templates/cosmics/v0.2/
+"""
+
+import sys, os
+import numpy as np
+from glob import glob
+import optparse
+from astropy.io import fits
+
+parser = optparse.OptionParser(usage = "%prog [options]")
+parser.add_option("-i", "--indir", type=str,  help="input basis template directory")
+parser.add_option("-o", "--outdir", type=str,  help="output basis template directory", default='.')
+parser.add_option("-r", "--randseed", type=int, default=0, help="random seed")
+# parser.add_option("-v", "--verbose", action="store_true", help="some flag")
+opts, args = parser.parse_args()
+
+cosmics_ver = 'v0.2'
+
+if opts.indir is None:
+    if 'DESI_ROOT' not in os.environ:
+        raise RuntimeError('ERROR: must provide --indir or $DESI_ROOT')
+    opts.indir = os.path.join(
+        os.getenv('DESI_ROOT'), 'spectro', 'templates', 'cosmics', cosmics_ver)
+  
+#- safety check  
+if os.path.abspath(opts.indir) == os.path.abspath(opts.outdir):
+    raise IOError('indir and outdir must be different')
+        
+fileglob = os.path.join(opts.indir, 'cosmics-*.fits')
+cosmics_files = sorted(glob(fileglob))
+if len(cosmics_files) == 0:
+    raise IOError('ERROR: no files found in '+fileglob)
+    
+for infile in cosmics_files:
+    fx = fits.open(infile)
+    hdus = fits.HDUList()
+    n = 20
+    hdus.append(fits.PrimaryHDU(fx[0].data[0:n,0:n], header=fx[0].header))
+    for hx in fx[1:]:
+        data = hx.data[0:n, 0:n]
+        if data.dtype == 'int8':
+            data = data.astype('int16')  #- work around astropy.io.fits bug...
+        hdus.append(fits.ImageHDU(data, header=hx.header))
+    outfile = os.path.join(opts.outdir, os.path.basename(infile))
+    hdus.writeto(outfile)
+    fx.close()
+    

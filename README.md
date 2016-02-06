@@ -14,6 +14,6 @@ The scripts to trim the basis templates and the cosmics files are in
 These require access to a non-trimmed version of the files, e.g.
 from NERSC:/project/projectdirs/desi/
 
-Stephen Bailey, LBL \\
+Stephen Bailey, LBL  
 2016-02-05
     

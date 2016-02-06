@@ -41,11 +41,11 @@ def main():
     parser = optparse.OptionParser(usage = "%prog [options]")
     parser.add_option("-i", "--indir", type=str,  help="input basis template directory")
     parser.add_option("-o", "--outdir", type=str,  help="output basis template directory", default='.')
-    parser.add_option("-r", "--randseed", type=int, default=0, help="random seed")
+    # parser.add_option("-r", "--randseed", type=int, default=0, help="random seed")
     # parser.add_option("-v", "--verbose", action="store_true", help="some flag")
     opts, args = parser.parse_args()
 
-    np.random.seed(opts.randseed)
+    # np.random.seed(opts.randseed)
 
     if opts.indir is None:
         if 'DESI_BASIS_TEMPLATES' in os.environ:

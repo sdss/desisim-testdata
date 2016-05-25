@@ -38,9 +38,12 @@ for infile in cosmics_files:
     fx = fits.open(infile)
     hdus = fits.HDUList()
     n = 20
-    hdus.append(fits.PrimaryHDU(fx[0].data[0:n,0:n], header=fx[0].header))
+    midy = fx[0].data.shape[0]//2 - n//2
+    midx = fx[0].data.shape[1]//2 - n//2
+    xy = np.s_[midy:midy+n, midx:midx+n]
+    hdus.append(fits.PrimaryHDU(fx[0].data[xy], header=fx[0].header))
     for hx in fx[1:]:
-        data = hx.data[0:n, 0:n]
+        data = hx.data[xy]
         if data.dtype == 'int8':
             data = data.astype('int16')  #- work around astropy.io.fits bug...
         hdus.append(fits.ImageHDU(data, header=hx.header))

@@ -55,7 +55,7 @@ def main():
             
     if not os.path.isdir(opts.outdir):
         os.makedirs(opts.outdir)
-        
+
     for infile in sorted(glob(os.path.join(opts.indir, '*_templates_*.fits'))):
         basename = os.path.basename(infile)
         outfile = os.path.join(opts.outdir, basename.replace('.fits', '-lite.fits'))

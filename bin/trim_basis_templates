@@ -20,7 +20,7 @@ def trim_template(infile, outfile):
     hdus.append(fits.PrimaryHDU(fx[0].data[0::n, 0::n], header=fx[0].header))
     hdus.append(fits.BinTableHDU(fx[1].data[0::n], header=fx[1].header))
     hdus.append(fits.ImageHDU(fx[2].data[0::n], header=fx[2].header))    
-    hdus.writeto(outfile, clobber=True)
+    hdus.writeto(outfile, overwrite=True)
         
 def trim_qso(infile, outfile):
     print(infile, '->', outfile)
@@ -35,7 +35,7 @@ def trim_qso(infile, outfile):
 
     hdus.append(fits.ImageHDU(fx[5].data[:, 0::n], header=fx[5].header))
     hdus.append(fits.ImageHDU(fx[6].data[0::n], header=fx[6].header))
-    hdus.writeto(outfile, clobber=True)    
+    hdus.writeto(outfile, overwrite=True)    
     
 def main():
     parser = optparse.OptionParser(usage = "%prog [options]")

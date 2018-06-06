@@ -21,7 +21,7 @@ def trim_template(infile, outfile):
     hdus.append(fits.BinTableHDU(fx[1].data[0::n], header=fx[1].header))
     hdus.append(fits.ImageHDU(fx[2].data[0::n], header=fx[2].header))    
     hdus.writeto(outfile, overwrite=True)
-        
+
 def trim_qso(infile, outfile):
     print(infile, '->', outfile)
     n = 10
@@ -61,6 +61,8 @@ def main():
         outfile = os.path.join(opts.outdir, basename.replace('.fits', '-lite.fits'))
         if basename.startswith('qso'):
             trim_qso(infile, outfile)
+        elif basename.startswith('bal'):
+            pass # to be added
         else:
             trim_template(infile, outfile)
 

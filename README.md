@@ -1,3 +1,5 @@
+This is a fork of the desisim-testdata package designed to be used for LVM.
+
 # desisim-testdata
 
 This repo includes a lightweight set of input data for testing desisim by

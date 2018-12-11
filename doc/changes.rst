@@ -2,7 +2,12 @@
 desisim-testdata change log
 ===========================
 
-0.6.1 (unreleased)
+0.6.2 (unreleased)
+------------------
+
+* No changes yet.
+
+0.6.1 (2018-12-11)
 ------------------
 
 * Add v3.1 lite basis templates, which include pre-computed DESI colors as a

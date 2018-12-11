@@ -12,16 +12,29 @@ import numpy as np
 import optparse
 from astropy.io import fits
 
+from desiutil.log import get_logger
+log = get_logger()
+
 def trim_template(infile, outfile):
     print(infile, '->', outfile)
     n = 10
     hdus = fits.HDUList()
     with fits.open(infile) as fx:
-        hdus.append(fits.PrimaryHDU(fx['FLUX'].data[0::n, 0::n], header=fx['FLUX'].header))
+        try:
+            hdus.append(fits.PrimaryHDU(fx['FLUX'].data[0::n, 0::n], header=fx['FLUX'].header))
+        except:
+            log.warning('Missing EXTNAME=FLUX in template file {}'.format(infile))
+            hdus.append(fits.PrimaryHDU(fx[0].data[0::n, 0::n], header=fx[0].header))           
         hdus.append(fits.BinTableHDU(fx['METADATA'].data[0::n], header=fx['METADATA'].header))
-        hdus.append(fits.ImageHDU(fx['WAVE'].data[0::n], header=fx['WAVE'].header))
+        try:
+            hdus.append(fits.ImageHDU(fx['WAVE'].data[0::n], header=fx['WAVE'].header))
+        except:
+            log.warning('Missing EXTNAME=WAVE in template file {}'.format(infile))
+            hdus.append(fits.ImageHDU(fx[2].data[0::n], header=fx[2].header))
         if 'COLORS' in fx:
             hdus.append(fits.ImageHDU(fx['COLORS'].data[0::n, :], header=fx['COLORS'].header))
+        if 'DESI-COLORS' in fx:
+            hdus.append(fits.BinTableHDU(fx['DESI-COLORS'].data[0::n], header=fx['DESI-COLORS'].header))
     hdus.writeto(outfile, overwrite=True)
 
 def trim_qso(infile, outfile):

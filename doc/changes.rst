@@ -5,7 +5,10 @@ desisim-testdata change log
 0.6.1 (unreleased)
 ------------------
 
-* No changes yet
+* Add v3.1 lite basis templates, which include pre-computed DESI colors as a
+  dedicated HDU (`PR #14`_). 
+
+.. _`PR #14`: https://github.com/desihub/desisim/pull/14
 
 0.6.0 (2018-11-08)
 ------------------

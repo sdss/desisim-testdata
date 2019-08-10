@@ -5,7 +5,7 @@ desisim-testdata change log
 0.6.2 (unreleased)
 ------------------
 
-* No changes yet.
+* Added trimmed desi/spectro/templates/cosmics/v0.3/
 
 0.6.1 (2018-12-11)
 ------------------

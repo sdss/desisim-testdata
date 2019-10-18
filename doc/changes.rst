@@ -6,6 +6,7 @@ desisim-testdata change log
 ------------------
 
 * Added trimmed desi/spectro/templates/cosmics/v0.3/
+* Add v3.2 lite basis templates.
 
 0.6.1 (2018-12-11)
 ------------------

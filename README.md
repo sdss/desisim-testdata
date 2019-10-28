@@ -1,4 +1,4 @@
-This is a fork of the desisim-testdata package designed to be used for LVM.
+**Deprecated for LVM developement until further notice.**  This is a fork of the desisim-testdata package designed to be used for LVM.
 
 # desisim-testdata
 

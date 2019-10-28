@@ -17,7 +17,7 @@ parser.add_option("-r", "--randseed", type=int, default=0, help="random seed")
 # parser.add_option("-v", "--verbose", action="store_true", help="some flag")
 opts, args = parser.parse_args()
 
-cosmics_ver = 'v0.2'
+cosmics_ver = 'v0.3'
 
 if opts.indir is None:
     if 'DESI_ROOT' not in os.environ:
